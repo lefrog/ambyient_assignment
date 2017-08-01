@@ -10,3 +10,13 @@ Some key design considerations are:
  
 The geocoding should be managed using the Google geocode service:
 https://developers.google.com/maps/documentation/geocoding/
+
+## TODO
+
+- error handling
+  - non HTTP 200 response
+  - exponential backoff
+  - invalid request (bad address)
+  
+- throttling
+- testing
