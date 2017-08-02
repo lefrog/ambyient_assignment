@@ -3,6 +3,7 @@ const fs_async = require("./fs_async_await");
 
 const fs_mod = require("fs");
 const Throttle = require("./ThrottleReadableStream");
+const GoogleGeoCoding = require("./GoogleGeoCoding");
 
 const csvFile = process.argv[2];
 
@@ -13,15 +14,22 @@ async function main(filePath) {
     return 1;
   }
 
-  let throttle = new Throttle();
-  throttle.on("data", data => {
-    console.log(`data: ${data}`);
+  let throttle = new Throttle({
+    itemPerSecond: appConfig.itemPerSecond
+  });
+
+  let googleGeoCoding = new GoogleGeoCoding({
+    googleGeoCodingUrl: appConfig.google_map_api.url,
+    key: appConfig.google_map_api.key
   });
 
   const byline = require("byline");
   fs_mod.createReadStream(filePath, "utf8")
     .pipe(byline.createStream())
-    .pipe(throttle);
+    .pipe(throttle)
+    .pipe(googleGeoCoding)
+    .pipe(process.stdout)
+  ;
 }
 
 main(csvFile);

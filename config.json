@@ -1,6 +1,8 @@
 {
   "google_map_api": {
     "key": "AIzaSyASiBj4QKpCtiTtY6wtJND0QCf3sBVHL1s",
-    "url": "https://maps.googleapis.com/maps/api/geocode/json"
-  }
+    "url": "https://maps.googleapis.com/maps/api/geocode/json?key={key}&address={address}"
+  },
+  "skip_headers": true,
+  "itemPerSecond": 50
 }
