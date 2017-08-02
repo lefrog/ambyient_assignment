@@ -3,10 +3,10 @@ const http_mod = require("http");
 const https_mod = require("https");
 const {URL} = require("url");
 
-class GoogleGeoCoding extends Transform {
+class GoogleGeoCodingStream extends Transform {
   constructor(options = {}) {
     super({
-      writableObjectMode: true
+      objectMode: true
     });
 
     this.googleGeoCodingUrl = options.googleGeoCodingUrl;
@@ -35,7 +35,8 @@ class GoogleGeoCoding extends Transform {
           jsonResponse += chunk;
         });
         res.on("end", () => {
-          callback(null, jsonResponse);
+          let geoCodeResponse = JSON.parse(jsonResponse);
+          callback(null, geoCodeResponse);
         });
         res.on("error", err => {
           callback(err);
@@ -55,4 +56,4 @@ class GoogleGeoCoding extends Transform {
   }
 }
 
-module.exports = GoogleGeoCoding;
+module.exports = GoogleGeoCodingStream;

@@ -1,3 +1,5 @@
+const logger = require("log4js").getLogger("LineStream");
+
 const {Transform} = require("stream");
 
 class LineStream extends Transform {
@@ -32,7 +34,7 @@ class LineStream extends Transform {
       }
 
       if (line.length > 0) {
-        this.push(line);
+        this._pushLine(line);
       }
     }
 
@@ -42,7 +44,7 @@ class LineStream extends Transform {
         if (!linesString.endsWith(this.separator)) {
           this.partialLine = lastLine;
         } else {
-          this.push(lastLine)
+          this._pushLine(lastLine);
         }
       }
     }
@@ -51,10 +53,15 @@ class LineStream extends Transform {
 
   _flush(callback) {
     if (this.partialLine) {
-      this.push(this.partialLine);
+      this._pushLine(this.partialLine);
       this.partialLine = "";
     }
     callback();
+  }
+
+  _pushLine(line) {
+    logger.trace(`line ${this.lineCounter}: ${line}`);
+    this.push(line)
   }
 }
 

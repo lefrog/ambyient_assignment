@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "fake_server": "json-server --watch tests/db.json"
   },
   "dependencies": {
     "@google/maps": "^0.4.3",
@@ -11,7 +12,12 @@
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.3",
     "express": "~4.15.2",
+    "log4js": "^2.3.2",
     "morgan": "~1.8.1",
     "serve-favicon": "~2.4.2"
+  },
+  "devDependencies": {
+    "json-server": "^0.11.2",
+    "node-mock-server": "^0.17.1"
   }
 }

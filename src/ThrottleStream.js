@@ -2,15 +2,10 @@ const {Transform} = require("stream");
 
 const ONE_SECOND = 1000;
 
-class Throttle extends Transform {
+class ThrottleStream extends Transform {
   constructor(options = {}) {
     super(options);
     this.itemPerSecond = options.itemPerSecond || 1;
-
-    this.timer = setInterval(
-      () => this._reset(),
-      ONE_SECOND
-    );
 
     this._reset();
   }
@@ -33,7 +28,10 @@ class Throttle extends Transform {
         0
       );
       this.throttlePauseTimer = setTimeout(
-        () => this._processData(data, encoding, callback),
+        () => {
+          this._reset();
+          this._processData(data, encoding, callback);
+        },
         pauseFor
       );
     } else {
@@ -42,10 +40,9 @@ class Throttle extends Transform {
   }
 
   _flush(callback) {
-    clearInterval(this.timer);
     this.throttlePauseTimer && clearTimeout(this.throttlePauseTimer);
     callback();
   }
 }
 
-module.exports = Throttle;
+module.exports = ThrottleStream;
