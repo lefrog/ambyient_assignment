@@ -3,9 +3,7 @@ const {Transform} = require("stream");
 const ONE_SECOND = 1000;
 
 class Throttle extends Transform {
-  constructor(options = {
-    objectMode: true
-  }) {
+  constructor(options = {}) {
     super(options);
     this.itemPerSecond = options.itemPerSecond || 1;
 
@@ -46,6 +44,7 @@ class Throttle extends Transform {
   _flush(callback) {
     clearInterval(this.timer);
     this.throttlePauseTimer && clearTimeout(this.throttlePauseTimer);
+    callback();
   }
 }
 

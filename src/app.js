@@ -1,7 +1,10 @@
-const appConfig = require("../config.json");
+const fs_mod = require("fs");
+
 const fs_async = require("./fs_async_await");
 
-const fs_mod = require("fs");
+const appConfig = require("../config.json");
+
+const LineStream = require("./LineStream");
 const Throttle = require("./ThrottleReadableStream");
 const GoogleGeoCoding = require("./GoogleGeoCoding");
 
@@ -14,6 +17,10 @@ async function main(filePath) {
     return 1;
   }
 
+  let lineStream = new LineStream({
+    skipFirstLine: appConfig.skip_headers
+  });
+
   let throttle = new Throttle({
     itemPerSecond: appConfig.itemPerSecond
   });
@@ -23,9 +30,8 @@ async function main(filePath) {
     key: appConfig.google_map_api.key
   });
 
-  const byline = require("byline");
   fs_mod.createReadStream(filePath, "utf8")
-    .pipe(byline.createStream())
+    .pipe(lineStream)
     .pipe(throttle)
     .pipe(googleGeoCoding)
     .pipe(process.stdout)

@@ -4,5 +4,5 @@
     "url": "https://maps.googleapis.com/maps/api/geocode/json?key={key}&address={address}"
   },
   "skip_headers": true,
-  "itemPerSecond": 50
+  "itemPerSecond": 1
 }

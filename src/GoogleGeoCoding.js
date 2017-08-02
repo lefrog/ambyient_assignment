@@ -4,9 +4,9 @@ const https_mod = require("https");
 const {URL} = require("url");
 
 class GoogleGeoCoding extends Transform {
-  constructor(options) {
+  constructor(options = {}) {
     super({
-      objectMode: true
+      writableObjectMode: true
     });
 
     this.googleGeoCodingUrl = options.googleGeoCodingUrl;
