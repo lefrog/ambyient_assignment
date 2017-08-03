@@ -3,10 +3,12 @@ const logger = require("log4js").getLogger("LineStream");
 const {Transform} = require("stream");
 
 class LineStream extends Transform {
-  constructor(options = {}) {
+  constructor(options = {
+    encoding: "utf8"
+  }) {
     super(options);
 
-    this.skipFirstLine = new Boolean(options.skipFirstLine);
+    this.skipFirstLine = Boolean(options.skipFirstLine);
     this.encoding = options.encoding || "utf8";
     this.separator = options.separator || "\r\n";
 
@@ -41,10 +43,10 @@ class LineStream extends Transform {
     if (i > 0) {
       let lastLine = lines[i];
       if (lastLine) {
-        if (!linesString.endsWith(this.separator)) {
-          this.partialLine = lastLine;
-        } else {
+        if (linesString.endsWith(this.separator)) {
           this._pushLine(lastLine);
+        } else {
+          this.partialLine = lastLine;
         }
       }
     }

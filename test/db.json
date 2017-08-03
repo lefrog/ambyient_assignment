@@ -1,0 +1,103 @@
+{
+  "fake_api": {
+    "results": [
+      {
+        "address_components": [
+          {
+            "long_name": "3895",
+            "short_name": "3895",
+            "types": [
+              "street_number"
+            ]
+          },
+          {
+            "long_name": "Church Street",
+            "short_name": "Church St",
+            "types": [
+              "route"
+            ]
+          },
+          {
+            "long_name": "Clarkston",
+            "short_name": "Clarkston",
+            "types": [
+              "locality",
+              "political"
+            ]
+          },
+          {
+            "long_name": "DeKalb County",
+            "short_name": "Dekalb County",
+            "types": [
+              "administrative_area_level_2",
+              "political"
+            ]
+          },
+          {
+            "long_name": "Georgia",
+            "short_name": "GA",
+            "types": [
+              "administrative_area_level_1",
+              "political"
+            ]
+          },
+          {
+            "long_name": "United States",
+            "short_name": "US",
+            "types": [
+              "country",
+              "political"
+            ]
+          },
+          {
+            "long_name": "30021",
+            "short_name": "30021",
+            "types": [
+              "postal_code"
+            ]
+          },
+          {
+            "long_name": "1710",
+            "short_name": "1710",
+            "types": [
+              "postal_code_suffix"
+            ]
+          }
+        ],
+        "formatted_address": "3895 Church St, Clarkston, GA 30021, USA",
+        "geometry": {
+          "bounds": {
+            "northeast": {
+              "lat": 33.8081501,
+              "lng": -84.23961899999999
+            },
+            "southwest": {
+              "lat": 33.8075291,
+              "lng": -84.240262
+            }
+          },
+          "location": {
+            "lat": 33.8078396,
+            "lng": -84.2399405
+          },
+          "location_type": "ROOFTOP",
+          "viewport": {
+            "northeast": {
+              "lat": 33.8091885802915,
+              "lng": -84.23859151970851
+            },
+            "southwest": {
+              "lat": 33.80649061970851,
+              "lng": -84.24128948029151
+            }
+          }
+        },
+        "place_id": "ChIJOU75ZkWo9YgRzA4kDHOODEU",
+        "types": [
+          "premise"
+        ]
+      }
+    ],
+    "status": "OK"
+  }
+}

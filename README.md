@@ -13,10 +13,12 @@ https://developers.google.com/maps/documentation/geocoding/
 
 ## TODO
 
+### Tasks
 - error handling
   - non HTTP 200 response
   - exponential backoff
   - invalid request (bad address)
-  
 - throttling
-- testing
+
+### Testing
+

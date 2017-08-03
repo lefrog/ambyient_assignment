@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "fake_server": "json-server --watch tests/db.json"
+    "fake_server": "json-server --watch tests/db.json",
+    "test": "mocha"
   },
   "dependencies": {
     "@google/maps": "^0.4.3",
@@ -17,7 +18,10 @@
     "serve-favicon": "~2.4.2"
   },
   "devDependencies": {
+    "chai": "^4.1.0",
     "json-server": "^0.11.2",
+    "minimal-timer": "^4.1.0",
+    "mocha": "^3.5.0",
     "node-mock-server": "^0.17.1"
   }
 }

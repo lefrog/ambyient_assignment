@@ -10,17 +10,6 @@ class ThrottleStream extends Transform {
     this._reset();
   }
 
-  _reset() {
-    this.itemCounter = 0;
-    this.lastRun = Date.now();
-  }
-
-  _processData(data, encoding, callback) {
-    this.itemCounter++;
-    this.push(data);
-    callback();
-  }
-
   _transform(data, encoding, callback) {
     if (this.itemCounter >= this.itemPerSecond) {
       let pauseFor = Math.max(
@@ -41,6 +30,17 @@ class ThrottleStream extends Transform {
 
   _flush(callback) {
     this.throttlePauseTimer && clearTimeout(this.throttlePauseTimer);
+    callback();
+  }
+
+  _reset() {
+    this.itemCounter = 0;
+    this.lastRun = Date.now();
+  }
+
+  _processData(data, encoding, callback) {
+    this.itemCounter++;
+    this.push(data);
     callback();
   }
 }
