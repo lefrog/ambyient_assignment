@@ -1,21 +1,14 @@
 {
   "name": "ambyint-assignment",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
+    "prove-it": "node src/app.js sample_data/addresses.csv",
     "fake_server": "json-server --watch test/db.json",
     "test": "mocha"
   },
   "dependencies": {
-    "@google/maps": "^0.4.3",
-    "body-parser": "~1.17.1",
-    "cookie-parser": "~1.4.3",
-    "debug": "~2.6.3",
-    "express": "~4.15.2",
-    "log4js": "^2.3.2",
-    "morgan": "~1.8.1",
-    "serve-favicon": "~2.4.2"
+    "log4js": "^2.3.2"
   },
   "devDependencies": {
     "chai": "^4.1.0",

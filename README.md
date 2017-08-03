@@ -11,7 +11,13 @@ Some key design considerations are:
 The geocoding should be managed using the Google geocode service:
 https://developers.google.com/maps/documentation/geocoding/
 
-## TODO
+## Execution
+
+Require Node.js v8+
+
+```
+npm run prove-it
+```
 
 ### Tasks
 - error handling

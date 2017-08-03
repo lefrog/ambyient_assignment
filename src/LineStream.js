@@ -63,7 +63,7 @@ class LineStream extends Transform {
 
   _pushLine(line) {
     line = line.replace(/"/g, "");
-    logger.trace(`line ${this.lineCounter}: ${line}`);
+    logger.isTraceEnabled() && logger.trace(`line ${this.lineCounter}: ${line}`);
     this.push(line)
   }
 }

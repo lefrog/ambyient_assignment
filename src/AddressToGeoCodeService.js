@@ -5,7 +5,6 @@ const LineStream = require("./LineStream");
 const ThrottleStream = require("./ThrottleStream");
 const GoogleGeoCodingStream = require("./GoogleGeoCodingStream");
 const FilterGeoCodeResponseStream = require("./FilterGeoCodeResponseStream");
-const ObjectToJsonStream = require("./ObjectToJsonStream");
 
 class AddressToGeoCodeService extends EventEmitter {
   constructor(options = {}) {
