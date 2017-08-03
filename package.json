@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "fake_server": "json-server --watch tests/db.json",
+    "fake_server": "json-server --watch test/db.json",
     "test": "mocha"
   },
   "dependencies": {

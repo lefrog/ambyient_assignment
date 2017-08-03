@@ -1,3 +1,4 @@
+const logger = require("log4js").getLogger("GoogleGeoCodingStream");
 const {Transform} = require("stream");
 const http_mod = require("http");
 const https_mod = require("https");
@@ -11,42 +12,54 @@ class GoogleGeoCodingStream extends Transform {
 
     this.googleGeoCodingUrl = options.googleGeoCodingUrl;
     this.key = options.key;
+    this.maxAttempt = 10;
   }
 
   _transform(address, encoding, callback) {
-    let jsonResponse = "";
     let url = new URL(this._getUrl(address));
     let get = url.protocol === "https:" ? https_mod.get : http_mod.get;
+    this._execRequest(get, url, callback)
+  }
 
-    try {
-      let request = get(url, res => {
-        const {
-          statusCode,
-          statusMessage
-        } = res;
+  _execRequest(get, url, callback, attempt = 0) {
+    let jsonResponse = "";
+    let request = get(url, res => {
+      const {
+        statusCode,
+        statusMessage
+      } = res;
 
-        if (statusCode !== 200) {
-          callback(new Error(statusMessage));
-          return;
-        }
+      if (statusCode !== 200) {
+        callback(new Error(statusMessage));
+        return;
+      }
 
-        res.setEncoding("utf8");
-        res.on("data", chunk => {
-          jsonResponse += chunk;
-        });
-        res.on("end", () => {
-          let geoCodeResponse = JSON.parse(jsonResponse);
-          callback(null, geoCodeResponse);
-        });
-        res.on("error", err => {
-          callback(err);
-        });
-      }).on("error", err => {
+      res.setEncoding("utf8");
+      res.on("data", chunk => {
+        jsonResponse += chunk;
+      });
+      res.on("end", () => {
+        let geoCodeResponse = JSON.parse(jsonResponse);
+        callback(null, geoCodeResponse);
+      });
+      res.on("error", err => {
         callback(err);
       });
-    } catch (err) {
-      callback(err);
-    }
+    }).on("error", err => {
+      if (err.code === "ECONNREFUSED") {
+        if (attempt > this.maxAttempt) {
+          logger.error(`connection refused. exhausted max attempts`);
+          callback(err);
+        } else {
+          attempt++;
+          let delay = attempt * attempt * 1000;
+          logger.warn(`connection refused. attempt ${attempt}, will try again in ${delay}ms`);
+          setTimeout(() => this._execRequest(get, url, callback, attempt), delay);
+        }
+      } else {
+        callback(err);
+      }
+    });
   }
 
   _getUrl(address) {
