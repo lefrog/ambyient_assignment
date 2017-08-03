@@ -37,11 +37,16 @@ async function main(filePath) {
     key: appConfig.google_map_api.key
   });
 
+  let filterGeoCodeResponseStream = new FilterGeoCodeResponseStream();
+  filterGeoCodeResponseStream.on(FilterGeoCodeResponseStream.events.NOT_OK, response => {
+    console.error(`failed: ${JSON.stringify(response)}`);
+  });
+
   fs_mod.createReadStream(filePath, "utf8")
     .pipe(lineStream)
     .pipe(throttleStream)
     .pipe(googleGeoCodingStream)
-    .pipe(new FilterGeoCodeResponseStream())
+    .pipe(filterGeoCodeResponseStream)
     .pipe(new ObjectToJsonStream())
     .pipe(process.stdout)
   ;

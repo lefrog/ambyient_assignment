@@ -11,6 +11,7 @@ class FilterGeoCodeResponseStream extends Transform {
   _transform(data, encoding, callback) {
     if (data.status !== "OK") {
       logger.trace(`skipping: ${data}`);
+      this.emit(FilterGeoCodeResponseStream.events.NOT_OK, data);
       callback(null, null);
       return;
     }
@@ -21,6 +22,7 @@ class FilterGeoCodeResponseStream extends Transform {
 
     if (!roofTop) {
       logger.trace(`skipping: ${data}`);
+      this.emit(FilterGeoCodeResponseStream.events.NO_ROOFTOP, data);
       callback(null, null);
       return;
     }
@@ -31,5 +33,10 @@ class FilterGeoCodeResponseStream extends Transform {
     callback(null, data);
   }
 }
+
+FilterGeoCodeResponseStream.events = {
+  NOT_OK: "not_ok",
+  NO_ROOFTOP: "no_rooftop"
+};
 
 module.exports = FilterGeoCodeResponseStream;
