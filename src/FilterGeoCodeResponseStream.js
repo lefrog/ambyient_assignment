@@ -9,14 +9,18 @@ class FilterGeoCodeResponseStream extends Transform {
   }
 
   _transform(data, encoding, callback) {
-    if (data.status !== "OK") {
+    let {
+      address,
+      geoCodeResponse
+    } = data;
+    if (geoCodeResponse.status !== "OK") {
       logger.trace(`skipping: ${data}`);
       this.emit(FilterGeoCodeResponseStream.events.NOT_OK, data);
       callback(null, null);
       return;
     }
 
-    let roofTop = data.results.find(r => {
+    let roofTop = geoCodeResponse.results.find(r => {
       return r.geometry.location_type === "ROOFTOP"
     });
 
@@ -27,16 +31,14 @@ class FilterGeoCodeResponseStream extends Transform {
       return;
     }
 
-    if (logger.isDebugEnabled()) {
-      logger.debug(`found: ${JSON.stringify(data)}`);
-    }
-    callback(null, data);
+    logger.isDebugEnabled() && logger.debug(`found: ${JSON.stringify(data)}`);
+    callback(null, geoCodeResponse);
   }
 }
 
 FilterGeoCodeResponseStream.events = {
-  NOT_OK: "not_ok",
-  NO_ROOFTOP: "no_rooftop"
+  NOT_OK: "NOT_OK",
+  NO_ROOFTOP: "NO_ROOFTOP"
 };
 
 module.exports = FilterGeoCodeResponseStream;

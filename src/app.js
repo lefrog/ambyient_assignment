@@ -7,10 +7,7 @@ const fs_async = require("./fs_async_await");
 
 const appConfig = require("../config.json");
 
-const LineStream = require("./LineStream");
-const ThrottleStream = require("./ThrottleStream");
-const GoogleGeoCodingStream = require("./GoogleGeoCodingStream");
-const FilterGeoCodeResponseStream = require("./FilterGeoCodeResponseStream");
+const AddressToGeoCodeService = require("./AddressToGeoCodeService");
 const ObjectToJsonStream = require("./ObjectToJsonStream");
 
 const csvFile = process.argv[2];
@@ -24,32 +21,23 @@ async function main(filePath) {
     return 1;
   }
 
-  let lineStream = new LineStream({
-    skipFirstLine: appConfig.skip_headers
-  });
-
-  let throttleStream = new ThrottleStream({
-    itemPerSecond: appConfig.itemPerSecond
-  });
-
-  let googleGeoCodingStream = new GoogleGeoCodingStream({
+  let addressToGeoCodeService = new AddressToGeoCodeService({
+    skipHeaders: appConfig.skip_headers,
+    itemPerSecond: appConfig.itemPerSecond,
     googleGeoCodingUrl: appConfig.google_map_api.url,
-    key: appConfig.google_map_api.key
+    apiKey: appConfig.google_map_api.key
+  });
+  addressToGeoCodeService.on(AddressToGeoCodeService.events.RESPONSE_NOT_OK, response => {
+    logger.isDebugEnabled() && logger.debug(`RESPONSE_NOT_OK: ${JSON.stringify(response)}`);
   });
 
-  let filterGeoCodeResponseStream = new FilterGeoCodeResponseStream();
-  filterGeoCodeResponseStream.on(FilterGeoCodeResponseStream.events.NOT_OK, response => {
-    console.error(`failed: ${JSON.stringify(response)}`);
-  });
+  let output = new ObjectToJsonStream();
+  output.pipe(process.stdout);
 
-  fs_mod.createReadStream(filePath, "utf8")
-    .pipe(lineStream)
-    .pipe(throttleStream)
-    .pipe(googleGeoCodingStream)
-    .pipe(filterGeoCodeResponseStream)
-    .pipe(new ObjectToJsonStream())
-    .pipe(process.stdout)
-  ;
+  addressToGeoCodeService.processFile(
+    fs_mod.createReadStream(filePath, "utf8"),
+    output
+  );
 }
 
 main(csvFile);

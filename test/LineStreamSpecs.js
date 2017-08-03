@@ -3,6 +3,24 @@ const should = require("chai").should();
 const LineStream = require("../src/LineStream");
 
 describe("LineStream", function() {
+  context("when parsing a 1 line string", function() {
+    it("should emit 1 line", function(done) {
+      let result = [];
+      const sut = new LineStream();
+      sut.setEncoding("utf8");
+      sut.on("data", data => {
+        data.should.be.a("string");
+        result.push(data);
+      });
+
+      sut.write("foo");
+      sut.end(() => {
+        result.should.eql(["foo"]);
+        done();
+      });
+    });
+  });
+
   context("when parsing a 2 lines string", function() {
     it("should emit 2 lines", function(done) {
       let result = [];

@@ -40,7 +40,7 @@ class LineStream extends Transform {
       }
     }
 
-    if (i > 0) {
+    if (i > 0 || lines.length == 1) {
       let lastLine = lines[i];
       if (lastLine) {
         if (linesString.endsWith(this.separator)) {
@@ -62,6 +62,7 @@ class LineStream extends Transform {
   }
 
   _pushLine(line) {
+    line = line.replace(/"/g, "");
     logger.trace(`line ${this.lineCounter}: ${line}`);
     this.push(line)
   }

@@ -19,6 +19,7 @@ https://developers.google.com/maps/documentation/geocoding/
   - exponential backoff
   - invalid request (bad address)
 - throttling
+- make module of main function
 
 ### Testing
-
+- integration test of main story

@@ -15,13 +15,14 @@ class GoogleGeoCodingStream extends Transform {
     this.maxAttempt = 10;
   }
 
-  _transform(address, encoding, callback) {
+  _transform(buffer, encoding, callback) {
+    let address = buffer.toString();
     let url = new URL(this._getUrl(address));
     let get = url.protocol === "https:" ? https_mod.get : http_mod.get;
-    this._execRequest(get, url, callback)
+    this._execRequest(get, url, address, callback)
   }
 
-  _execRequest(get, url, callback, attempt = 0) {
+  _execRequest(get, url, address, callback, attempt = 0) {
     let jsonResponse = "";
     let request = get(url, res => {
       const {
@@ -40,7 +41,10 @@ class GoogleGeoCodingStream extends Transform {
       });
       res.on("end", () => {
         let geoCodeResponse = JSON.parse(jsonResponse);
-        callback(null, geoCodeResponse);
+        callback(null, {
+          address,
+          geoCodeResponse
+        });
       });
       res.on("error", err => {
         callback(err);
